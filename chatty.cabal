@@ -1,0 +1,29 @@
+name:                Chatty
+version:             0.0.1
+synopsis:            A chat app
+homepage:            https://github.engineering.zhaw.ch/gaglinic/Chatty
+license:             MIT
+author:              Nicolas Gagliani
+maintainer:          you@email.com
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.8
+
+executable chatty
+  hs-source-dirs:
+                       src
+  main-is:             Main.hs
+  -- other-modules:
+  build-depends:       base >=4.7
+                     , servant
+                     , servant-server
+                     , aeson
+                     , text
+                     , warp
+                     , wai
+                     , transformers
+                     , groundhog
+                     , groundhog-sqlite
+                     , groundhog-th
+                     , resource-pool
+                     , monad-control
