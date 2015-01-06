@@ -42,7 +42,7 @@ chattyApi =  Proxy
 server :: Conn -> Server ChattyApi
 server conn = getGroupsH conn
 
-getGroupsH :: Monad m => Conn -> m [Group]
+getGroupsH :: (MonadBaseControl IO m, MonadIO m) => Conn -> m [Group]
 getGroupsH conn =
 	do
 		conn $ do
@@ -59,11 +59,13 @@ main =
 	do
 		let
 			conn :: Conn
-			conn m = withSqliteConn ":memory:" $ runDbConn $ m
+			conn m = withSqliteConn "db.sqlite" $ runDbConn $ m
 		conn $ do
 			runMigration $ do
 				migrate (undefined :: Group)
 				migrate (undefined :: Channel)
 
+			_ <- insert $ Group "Haskell"
+			return ()
 
 		runTestServer conn 8001
