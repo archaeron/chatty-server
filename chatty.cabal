@@ -27,3 +27,4 @@ executable chatty
                      , groundhog-th
                      , resource-pool
                      , monad-control
+                     , monad-logger

@@ -5,6 +5,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Models.Group where
 
@@ -22,7 +23,9 @@ data Group =
 		} deriving (Generic, Show)
 
 instance FromJSON Group
-instance ToJSON Group
+
+instance ToJSON Group where
+	toJSON (Group name) = object [ "name" .= name ]
 
 mkPersist defaultCodegenConfig [groundhog|
 - entity: Group			   # Name of the datatype
