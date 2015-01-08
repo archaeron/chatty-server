@@ -13,6 +13,7 @@ import Control.Monad.IO.Class
 import Control.Monad.Trans.Control
 import Data.Proxy
 import Database.Groundhog
+import Database.Groundhog.Core
 import Database.Groundhog.Sqlite
 import Models.Channel
 import Models.Group
@@ -26,22 +27,31 @@ type Conn = (MonadBaseControl IO m, MonadIO m) => DbPersist Sqlite (NoLoggingT m
 -- API specification
 type ChattyApi =
 	"groups" :> Get [Group]
-	:<|> "group" :> Capture "userId" Int :> Get Group
+	:<|> "group" :> Capture "userId" Int :> Get (Maybe Group)
 
 
 chattyApi :: Proxy ChattyApi
 chattyApi =  Proxy
 
+db :: Proxy Sqlite
+db = undefined
 
 server :: Conn -> Server ChattyApi
-server conn = getGroupsH conn :<|> getGroupH
+server conn = getGroupsH conn :<|> getGroupH conn
+
+intToKey :: (DbDescriptor db, PrimitivePersistField (Key a b)) => Int -> Key a b
+intToKey p = integralToKey p
+
+
+integralToKey :: (PrimitivePersistField i, PrimitivePersistField (Key a b)) =>  i -> Key a b
+integralToKey = fromPrimitivePersistValue db . toPrimitivePersistValue db
 
 getGroupsH :: (MonadBaseControl IO m, MonadIO m) => Conn -> m [Group]
 getGroupsH conn = conn $ select CondEmpty
 	--return [ Group "Haskell" ]
 
-getGroupH :: Monad m => Int -> m Group
-getGroupH groupId = return $ Group "Haskell"
+getGroupH :: (MonadBaseControl IO m, MonadIO m) => Conn -> Int -> m (Maybe Group)
+getGroupH conn groupId = conn $ get (intToKey chattyApi groupId)
 
 runTestServer :: Conn -> Port -> IO ()
 runTestServer conn port = run port (serve chattyApi $ server conn)
