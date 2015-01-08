@@ -39,7 +39,7 @@ db = undefined
 server :: Conn -> Server ChattyApi
 server conn = getGroupsH conn :<|> getGroupH conn
 
-intToKey :: (DbDescriptor db, PrimitivePersistField (Key a b)) => Int -> Key a b
+intToKey :: (PrimitivePersistField (Key a b)) => Int -> Key a b
 intToKey p = integralToKey p
 
 
@@ -51,7 +51,7 @@ getGroupsH conn = conn $ select CondEmpty
 	--return [ Group "Haskell" ]
 
 getGroupH :: (MonadBaseControl IO m, MonadIO m) => Conn -> Int -> m (Maybe Group)
-getGroupH conn groupId = conn $ get (intToKey chattyApi groupId)
+getGroupH conn groupId = conn $ get (intToKey groupId)
 
 runTestServer :: Conn -> Port -> IO ()
 runTestServer conn port = run port (serve chattyApi $ server conn)
