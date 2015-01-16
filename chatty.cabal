@@ -1,7 +1,7 @@
 name:                Chatty
 version:             0.0.1
 synopsis:            A chat app
-homepage:            https://github.engineering.zhaw.ch/gaglinic/Chatty
+homepage:            https://github.com/archaeron/Chatty
 license:             MIT
 author:              Nicolas Gagliani
 maintainer:          you@email.com
