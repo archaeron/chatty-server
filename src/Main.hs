@@ -56,6 +56,21 @@ getGroupH conn groupId = conn $ get (intToKey groupId)
 runTestServer :: Conn -> Port -> IO ()
 runTestServer conn port = run port (serve chattyApi $ server conn)
 
+testData conn =
+	conn $ do
+		runMigration $ do
+			migrate (undefined :: Group)
+			migrate (undefined :: Channel)
+
+		haskellKey <- insert $ Group "Haskell"
+		_ <- insert $ Group "Idris"
+		_ <- insert $ Group "Purescript"
+		_ <- insert $ Group "F#"
+		_ <- insert $ Group "Elm"
+		_ <- insert $ Channel "Servant" haskellKey
+		_ <- insert $ Channel "Groundhog" haskellKey
+		return ()
+
 
 main :: IO ()
 main =
@@ -63,12 +78,7 @@ main =
 		let
 			conn :: Conn
 			conn m = withSqliteConn "db.sqlite" $ runDbConn m
-		conn $ do
-			runMigration $ do
-				migrate (undefined :: Group)
-				migrate (undefined :: Channel)
 
-			--_ <- insert $ Group "Haskell"
-			return ()
+		-- testData conn
 
 		runTestServer conn 8001
