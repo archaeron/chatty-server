@@ -19,7 +19,7 @@ import Models.Channel
 import Models.Group
 import Network.Wai.Handler.Warp
 import Servant
-
+import Helpers.Database
 
 -- * Example
 type Conn = (MonadBaseControl IO m, MonadIO m) => DbPersist Sqlite (NoLoggingT m) a -> m a
@@ -33,18 +33,8 @@ type ChattyApi =
 chattyApi :: Proxy ChattyApi
 chattyApi =  Proxy
 
-db :: Proxy Sqlite
-db = undefined
-
 server :: Conn -> Server ChattyApi
 server conn = getGroupsH conn :<|> getGroupH conn
-
-intToKey :: (PrimitivePersistField (Key a b)) => Int -> Key a b
-intToKey p = integralToKey p
-
-
-integralToKey :: (PrimitivePersistField i, PrimitivePersistField (Key a b)) =>  i -> Key a b
-integralToKey = fromPrimitivePersistValue db . toPrimitivePersistValue db
 
 getGroupsH :: (MonadBaseControl IO m, MonadIO m) => Conn -> m [Group]
 getGroupsH conn = conn $ select CondEmpty
