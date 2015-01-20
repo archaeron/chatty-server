@@ -17,6 +17,7 @@ import Database.Groundhog.Core
 import Database.Groundhog.Sqlite
 import Models.Channel
 import Models.Group
+import Models.User
 import Network.Wai.Handler.Warp
 import Servant
 import Helpers.Database
@@ -62,6 +63,7 @@ testData conn =
 		runMigration $ do
 			migrate (undefined :: Group)
 			migrate (undefined :: Channel)
+			migrate (undefined :: User)
 
 		haskellKey <- insert $ Group "Haskell"
 		_ <- insert $ Group "Idris"
@@ -70,6 +72,9 @@ testData conn =
 		_ <- insert $ Group "Elm"
 		_ <- insert $ Channel "Servant" haskellKey
 		_ <- insert $ Channel "Groundhog" haskellKey
+
+		_ <- insert $ User "Frank" "frank@fake.com"
+		_ <- insert $ User "Hank" "hank@fake.com"
 		return ()
 
 
