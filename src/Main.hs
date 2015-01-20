@@ -27,21 +27,32 @@ type Conn = (MonadBaseControl IO m, MonadIO m) => DbPersist Sqlite (NoLoggingT m
 -- API specification
 type ChattyApi =
 	"groups" :> Get [Group]
-	:<|> "group" :> Capture "userId" Int :> Get (Maybe Group)
+	:<|> "group" :> Capture "groupId" Int :> Get (Maybe Group)
+	:<|> "channels" :> Get [Channel]
+	:<|> "channel" :> Capture "channelId" Int :> Get (Maybe Channel)
 
 
 chattyApi :: Proxy ChattyApi
 chattyApi =  Proxy
 
 server :: Conn -> Server ChattyApi
-server conn = getGroupsH conn :<|> getGroupH conn
+server conn =
+	getGroupsH conn
+	:<|> getGroupH conn
+	:<|> getChannelsH conn
+	:<|> getChannelH conn
 
 getGroupsH :: (MonadBaseControl IO m, MonadIO m) => Conn -> m [Group]
 getGroupsH conn = conn $ select CondEmpty
-	--return [ Group "Haskell" ]
 
 getGroupH :: (MonadBaseControl IO m, MonadIO m) => Conn -> Int -> m (Maybe Group)
 getGroupH conn groupId = conn $ get (intToKey groupId)
+
+getChannelsH :: (MonadBaseControl IO m, MonadIO m) => Conn -> m [Channel]
+getChannelsH conn = conn $ select CondEmpty
+
+getChannelH :: (MonadBaseControl IO m, MonadIO m) => Conn -> Int -> m (Maybe Channel)
+getChannelH conn channelId = conn $ get (intToKey channelId)
 
 runTestServer :: Conn -> Port -> IO ()
 runTestServer conn port = run port (serve chattyApi $ server conn)
