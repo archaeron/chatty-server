@@ -11,7 +11,6 @@ module Models.User where
 
 import GHC.Generics
 import Data.Aeson
-import Database.Groundhog
 import Database.Groundhog.Core ()
 import Database.Groundhog.TH
 import Database.Groundhog.Generic ()

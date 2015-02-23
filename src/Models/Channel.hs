@@ -25,7 +25,6 @@ data Channel =
             channelGroup :: DefaultKey Group
         } deriving (Generic, Show)
 
-
 instance ToJSON Channel where
     toJSON (Channel name group) = object ["name" .= name, "id" .= show group]
 
