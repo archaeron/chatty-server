@@ -18,12 +18,11 @@ import Database.Groundhog.Generic ()
 
 import Models.Group
 
-data User =
-  User
-  {
-    userName :: String
-  , userEmail :: String
-  } deriving (Generic, Show)
+data User = User
+    {
+        userName :: String
+      , userEmail :: String
+    } deriving (Generic, Show)
 
 
 instance ToJSON User where
