@@ -16,19 +16,18 @@ import Database.Groundhog.Core ()
 import Database.Groundhog.TH
 import Database.Groundhog.Generic ()
 
-data Group =
-	Group
-		{
-			groupName :: String
-		} deriving (Generic, Show)
+data Group = Group
+    {
+         groupName :: String
+    } deriving (Generic, Show)
 
 instance FromJSON Group
 
 instance ToJSON Group where
-	toJSON (Group name) = object [ "name" .= name ]
+    toJSON (Group name) = object [ "name" .= name ]
 
 mkPersist defaultCodegenConfig [groundhog|
-- entity: Group			   # Name of the datatype
+- entity: Group # Name of the datatype
   constructors:
     - name: Group
       fields:

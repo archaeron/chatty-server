@@ -18,12 +18,10 @@ import Database.Groundhog.Generic ()
 
 import Models.Group
 
-data Channel =
-    Channel
-        {
-            channelName :: String,
-            channelGroup :: DefaultKey Group
-        } deriving (Generic, Show)
+data Channel = Channel
+    { channelName :: String
+      , channelGroup :: DefaultKey Group
+    } deriving (Generic, Show)
 
 instance ToJSON Channel where
     toJSON (Channel name group) = object ["name" .= name, "id" .= show group]
