@@ -55,8 +55,8 @@ getChannelsH conn = conn $ select CondEmpty
 getChannelH :: (MonadBaseControl IO m, MonadIO m) => Conn -> Int -> m (Maybe Channel)
 getChannelH conn channelId = conn $ get (intToKey channelId)
 
-runTestServer :: Conn -> Port -> IO ()
-runTestServer conn port = run port (serve chattyApi $ server conn)
+runChattyServer :: Conn -> Port -> IO ()
+runChattyServer conn port = run port (serve chattyApi $ server conn)
 
 testData conn =
 	conn $ do
@@ -87,4 +87,4 @@ main =
 
 		-- testData conn
 
-		runTestServer conn 8001
+		runChattyServer conn 8001
