@@ -14,17 +14,17 @@ executable chatty
                        src
   main-is:             Main.hs
   -- other-modules:
-  build-depends:       base >=4.7
-                     , servant
-                     , servant-server
+  build-depends:       base >=4.7 && <5
+                     , servant >= 0.2.2 && < 0.3
+                     , servant-server >= 0.2.3 && < 0.3
                      , aeson
                      , text
                      , warp
                      , wai
                      , transformers
-                     , groundhog
-                     , groundhog-sqlite
-                     , groundhog-th
+                     , groundhog >= 0.7.0.2 && < 0.7.1
+                     , groundhog-sqlite >= 0.7.0.1 && < 0.7.1
+                     , groundhog-th >= 0.7.0 && < 0.7.1
                      , resource-pool
                      , monad-control
                      , monad-logger
